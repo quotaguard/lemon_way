@@ -99,7 +99,7 @@ module LemonWay
     def attrs_from_options attrs
       attrs.symbolize_keys!.camelize_keys!
       [:amount, :amountTot, :amountCom].each do |key|
-        attrs[key] = sprintf("%.2f",attrs[key]) if attrs.key?(key) and attrs[key].is_a?(Number)
+        attrs[key] = sprintf("%.2f",attrs[key]) if attrs.key?(key) and attrs[key].is_a?(Numeric)
       end
       [:updateDate].each do |key|
         attrs[key] = attrs[key].utc.to_i.to_s if attrs.key?(key) and attrs[key].is_a?(Time)
