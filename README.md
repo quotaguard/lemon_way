@@ -1,9 +1,7 @@
 __Caution : Still under developpement and subject to changes__ 
 # LemonWay
 
-Ruby API client to query LemonWay web merchant and blank label APIs
-
-Documentation at http://rubydoc.info/github/Paymium/lemon_way
+Ruby API client to query LemonWay
 
 ## Installation
 
@@ -21,17 +19,27 @@ Or install it yourself as:
 
 ## Usage
 
-```ruby
-LemonWay::Client::WhiteLabel.init   wl_login: "test",
-                                    wl_pass: "test",
-                                    wl_PDV: "test",
-                                    language: "fr",
-                                    version: "1.0"
+1. Initialize a client instance (URI is mandatory, all the params passed are later overridable in method calls)
+2. Query the API : the params as the query name may be underscored, they will be handled appropriately
+3. API response will always be a HashWithIndifferentAccess with underscored keys. Retrieve it as a result or pass a block to the API point method
 
-LemonWay::Client::WhiteLabel.register_wallet my_hash
+```ruby
+client = LemonWay::Client.new wl_login: "test",
+                              wl_pass: "test",
+                              wl_PDV: "test",
+                              language: "fr",
+                              version: "1.1",
+                              uri:  "https://ws.lemonway.fr/mb/your_merchant_name/dev/directkit/service.asmx"
+
+response = client.register_wallet my_hash
+
+client.register_wallet my_hash do |response|
+  response.class
+end
+=> HashWithIndifferentAccess
+
 ```
 
-See [this page](http://rubydoc.info/github/Paymium/lemon_way/LemonWay/Client/WhiteLabel) for details.
 
 
 ## Todo
