@@ -102,7 +102,7 @@ module LemonWay
         attrs[key] = sprintf("%.2f",attrs[key]) if attrs.key?(key) and attrs[key].is_a?(Numeric)
       end
       [:updateDate].each do |key|
-        attrs[key] = attrs[key].utc.to_i.to_s if attrs.key?(key) and attrs[key].is_a?(Time)
+        attrs[key] = attrs[key].to_datetime.utc.to_i.to_s if attrs.key?(key) and [Date, Time].any?{|k| attrs[key].is_a?(k)}
       end
       attrs
     end
