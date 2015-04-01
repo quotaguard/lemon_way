@@ -29,6 +29,7 @@ module LemonWay
       SendPayment
       UnregisterCard
       UpdateWalletDetails
+      UpdateWalletStatus
       UploadFile
     )
 
@@ -58,10 +59,9 @@ module LemonWay
       options[:builder] = Builder::XmlMarkup.new(:indent => 2)
       options[:builder].instruct!
       options[:builder].tag! "soap12:Envelope",
-                             "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance",
-                             "xmlns:xsd"=>"http://www.w3.org/2001/XMLSchema",
-                             "xmlns:soap12"=>"http://www.w3.org/2003/05/soap-envelope" do
-        options[:builder].tag! "soap12:Body" do
+                             "xmlns:SOAP-ENV" => "http://schemas.xmlsoap.org/soap/envelope/",
+                             "xmlns:ns1"=>"https://ws.hipay.com/soap/payment-v2" do
+        options[:builder].tag! "SOAP-ENV:Body" do
           options[:builder].__send__(:method_missing, method_name.to_s.camelize, xmlns: "Service_mb") do
             @options.merge(attrs).each do |key, value|
               ActiveSupport::XmlMini.to_tag(key, value, options)
