@@ -33,12 +33,13 @@ module LemonWay
       UploadFile
     )
 
-    attr_reader :uri, :xml_mini_backend, :entity_expansion_text_limit, :options
+    attr_reader :uri, :xml_mini_backend, :entity_expansion_text_limit, :options, :proxy
 
     def initialize opts = {}
-      @options = opts.symbolize_keys!.except(:uri, :xml_mini_backend).camelize_keys
+      @options = opts.symbolize_keys!.except(:uri, :xml_mini_backend, :proxy).camelize_keys
       @uri = URI.parse opts[:uri]
       @xml_mini_backend = opts[:xml_mini_backend] || ActiveSupport::XmlMini_REXML
+      @proxy = URI.parse opts[:proxy] unless opts[:proxy].nil?
       @entity_expansion_text_limit = opts[:entity_expansion_text_limit] || 10**20
     end
 
@@ -72,7 +73,7 @@ module LemonWay
     end
 
     def query(method, attrs={})
-      http          = Net::HTTP.new(@uri.host, @uri.port)
+      http = @proxy.nil? ? Net::HTTP.new(@uri.host, @uri.port) : Net::HTTP.new(@uri.host, @uri.port, @proxy.host, @proxy.port, @proxy.user, @proxy.password)
       http.use_ssl  = true if @uri.port == 443
 
       req           = Net::HTTP::Post.new(@uri.request_uri)
