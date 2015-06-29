@@ -61,8 +61,9 @@ module LemonWay
       options[:builder].instruct!
       options[:builder].tag! "soap12:Envelope",
                              "xmlns:SOAP-ENV" => "http://schemas.xmlsoap.org/soap/envelope/",
-                             "xmlns:ns1"=>"https://ws.hipay.com/soap/payment-v2" do
-        options[:builder].tag! "SOAP-ENV:Body" do
+                             "xmlns:ns1"=>"https://ws.hipay.com/soap/payment-v2",
+                             "xmlns:soap12"=>"http://www.w3.org/2003/05/soap-envelope" do
+        options[:builder].tag! "soap12:Body" do
           options[:builder].__send__(:method_missing, method_name.to_s.camelize, xmlns: "Service_mb") do
             @options.merge(attrs).each do |key, value|
               ActiveSupport::XmlMini.to_tag(key, value, options)
